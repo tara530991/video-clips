@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
 const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   console.log("VideoList render, refreshTrigger:", refreshTrigger);
 
@@ -67,6 +69,19 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
     fetchVideos();
   }, [fetchVideos, refreshTrigger]);
 
+  const handlePlayVideo = (video) => {
+    // 將影片資訊存儲在 localStorage 中
+    localStorage.setItem(
+      "currentVideo",
+      JSON.stringify({
+        url: video.publicUrl,
+        name: video.name.split("_").slice(1).join("_"),
+      })
+    );
+    // 使用 React Router 導航
+    navigate("/player");
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center p-8">
@@ -116,6 +131,12 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
                 <p className="text-sm text-secondary-light">
                   上傳時間：{video.uploadedAt.toLocaleString("zh-TW")}
                 </p>
+                <button
+                  onClick={() => handlePlayVideo(video)}
+                  className="mt-4 w-full px-4 py-2 bg-primary-dark text-primary-light rounded-md hover:bg-primary transition-colors"
+                >
+                  播放影片
+                </button>
               </div>
             </div>
           ))}
