@@ -1,0 +1,20 @@
+{
+  "short_name": "影片管理",
+  "name": "影片管理系統",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#BFC8EA",
+  "background_color": "#F8F9FC",
+  "orientation": "portrait",
+  "description": "一個簡單的影片管理系統，支援上傳和預覽影片",
+  "categories": ["video", "productivity"],
+  "lang": "zh-TW",
+  "dir": "ltr"
+}
