@@ -11,13 +11,11 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const handleUploadSuccess = useCallback(() => {
-    console.log("Upload success, triggering refresh");
     setRefreshTrigger((prev) => prev + 1);
     setShowToast(true);
   }, []);
 
   const handleVideoListUpdate = useCallback((videos) => {
-    console.log("VideoList update received:", videos?.length);
     setHasVideos(videos && videos.length > 0);
   }, []);
 

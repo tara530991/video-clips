@@ -2,10 +2,6 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   theme: {
-    colors: {
-      success: "#5ea500",
-      error: "#9f0712",
-    },
     extend: {
       colors: {
         primary: {
@@ -16,6 +12,10 @@ module.exports = {
         secondary: {
           light: "#5B67A2", // 次要浅色
           DEFAULT: "#545051", // 次要深色
+        },
+        colors: {
+          success: "#5ea500",
+          error: "#9f0712",
         },
       },
       animation: {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
+import VideoCard from "./VideoCard";
 
 const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
   const [videos, setVideos] = useState([]);
@@ -8,10 +9,7 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  console.log("VideoList render, refreshTrigger:", refreshTrigger);
-
   const fetchVideos = useCallback(async () => {
-    console.log("fetchVideos called");
     try {
       setLoading(true);
       const { data, error } = await supabase.storage.from("video-clips").list();
@@ -19,8 +17,6 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
       if (error) {
         throw error;
       }
-
-      console.log("data: ", data);
 
       // 取得每個影片的公開連結
       const videosWithUrls = await Promise.all(
@@ -48,12 +44,10 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
       const sortedVideos = videosWithUrls.sort(
         (a, b) => b.timestamp - a.timestamp
       );
-      console.log("Setting videos:", sortedVideos.length);
       setVideos(sortedVideos);
 
       // 確保在設置完 videos 後再通知父組件
       if (onVideosUpdate) {
-        console.log("Calling onVideosUpdate");
         onVideosUpdate(sortedVideos);
       }
     } catch (err) {
@@ -65,7 +59,6 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
   }, [onVideosUpdate]);
 
   useEffect(() => {
-    console.log("useEffect triggered, refreshTrigger:", refreshTrigger);
     fetchVideos();
   }, [fetchVideos, refreshTrigger]);
 
@@ -115,30 +108,11 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
       ) : (
         <div className="grid grid-cols-2 gap-4">
           {videos.map((video) => (
-            <div
+            <VideoCard
               key={video.name}
-              className="bg-primary-light rounded-lg overflow-hidden shadow-md"
-            >
-              <video
-                className="w-full h-48 object-cover"
-                src={video.publicUrl}
-                controls
-              />
-              <div className="p-4">
-                <p className="text-secondary font-medium truncate">
-                  {video.name.split("_").slice(1).join("_")}
-                </p>
-                <p className="text-sm text-secondary-light">
-                  上傳時間：{video.uploadedAt.toLocaleString("zh-TW")}
-                </p>
-                <button
-                  onClick={() => handlePlayVideo(video)}
-                  className="mt-4 w-full px-4 py-2 bg-primary-dark text-primary-light rounded-md hover:bg-primary transition-colors"
-                >
-                  播放影片
-                </button>
-              </div>
-            </div>
+              video={video}
+              onPlay={handlePlayVideo}
+            />
           ))}
         </div>
       )}
