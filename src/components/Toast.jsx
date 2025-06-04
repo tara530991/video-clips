@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Toast = ({ message, onClose }) => {
+const Toast = ({ type, message, onClose }) => {
   const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
@@ -17,11 +17,19 @@ const Toast = ({ message, onClose }) => {
 
   return (
     <div
-      className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 ${
+      className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50  ${
         isLeaving ? "animate-slide-up" : "animate-slide-down"
       }`}
     >
-      <div className="bg-success text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2">
+      <div
+        className={`${
+          type === "success"
+            ? "bg-colors-success"
+            : type === "error"
+            ? "bg-colors-error"
+            : "bg-secondary-light"
+        } text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2`}
+      >
         <svg
           className="w-5 h-5"
           fill="none"

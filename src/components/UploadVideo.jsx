@@ -29,6 +29,13 @@ const UploadVideo = ({ onUploadSuccess }) => {
     setIsDragging(false);
     const file = event.dataTransfer.files[0];
     if (file) {
+      const extension = file.name.split(".").pop().toLowerCase();
+      console.log("extension", extension);
+
+      if (extension !== "mp4" && extension !== "mov" && extension !== "webm") {
+        throw new Error("請上傳 MP4, WebM, MOV 格式");
+      }
+
       setSelectedFile(file);
       setError(null);
     }

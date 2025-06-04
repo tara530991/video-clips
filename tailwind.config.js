@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+// color: https://colorion.co/palette/87400
+
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   theme: {
