@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # 必須設，讓 workflow 之後可以推送
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
