@@ -4,17 +4,32 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#BFC8EA" />
-    <meta
-      name="description"
-      content="一個簡單的影片管理系統，支援上傳和預覽影片"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.svg" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Video Clips - 影片剪輯工具" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>影片管理系統</title>
+    <title>Video Clips</title>
+    <script type="text/javascript">
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      })(window.location);
+    </script>
   </head>
   <body>
-    <noscript>You need JavaScript to run this application.</noscript>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
 </html>
