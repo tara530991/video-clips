@@ -23,8 +23,8 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
   const [currentSubtitle, setCurrentSubtitle] = useState("");
   const [progress, setProgress] = useState(0);
   const [selectedHighlights, setSelectedHighlights] = useState([]);
-  const [viewMode, setViewMode] = useState("all"); // 'all' | 'highlights'
-  const [isFetchData, setFetchData] = useState(true); // true 才可以呼叫 useTranscript
+  const [viewMode, setViewMode] = useState("all"); // 'all' | 'highlights' | 'selected'
+  const [isFetchData, setFetchData] = useState(true); // true to enable useTranscript call
   const subtitleContainerRef = useRef(null);
 
   const { data, isLoading, error } = useTranscript({
@@ -32,7 +32,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     isFetchData,
   });
 
-  // 處理影片加載
+  // Handle video loading
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -55,7 +55,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     };
   }, []);
 
-  // 處理字幕更新
+  // Handle subtitle updates
   useEffect(() => {
     if (!data) return;
     if (isFetchData && data) {
@@ -83,7 +83,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     }
   }, [data, duration, currentTime, isPlaying]);
 
-  // 處理精彩片段選擇
+  // Handle highlight selection
   const handleHighlightToggle = useCallback((sentence) => {
     setSelectedHighlights((prev) => {
       const isSelected = prev.some((h) => h.start_time === sentence.start_time);
@@ -95,7 +95,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     });
   }, []);
 
-  // 處理播放控制
+  // Handle playback control
   const handlePlayPause = useCallback(() => {
     if (!videoRef.current) return;
     if (isPlaying) {
@@ -105,7 +105,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     }
   }, [isPlaying]);
 
-  // 快退/快轉功能
+  // Fast forward/rewind functionality
   const seek = useCallback(
     (offset) => {
       if (!videoRef.current) return;
@@ -117,7 +117,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     [duration]
   );
 
-  // 處理時間軸點擊
+  // Handle timeline click
   const handleTimelineClick = useCallback(
     (e) => {
       if (!videoRef.current || !duration) return;
@@ -130,7 +130,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     [duration]
   );
 
-  // 處理字幕點擊
+  // Handle subtitle click
   const handleSubtitleClick = useCallback((start) => {
     if (videoRef.current) {
       videoRef.current.currentTime = start;
@@ -138,7 +138,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     }
   }, []);
 
-  // 處理精彩片段播放器的時間更新
+  // Handle highlight player time update
   const handleHighlightTimeUpdate = useCallback(
     (time) => {
       setCurrentTime(time);
@@ -147,7 +147,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     [duration]
   );
 
-  // 過濾顯示的字幕
+  // Filter displayed subtitles
   const filteredData = useMemo(() => {
     if (!data) return [];
 
@@ -163,13 +163,13 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
       .filter((chapter) => chapter.sentences.length > 0);
   }, [data, viewMode, selectedHighlights]);
 
-  // 計算精彩片段區塊
+  // Calculate highlight blocks
   const highlightBlocks = useMemo(() => {
     if (!data || !duration) return [];
 
     const flatSubtitles = data.flatMap((ch) => ch.sentences);
 
-    // 在精彩片段模式下只顯示已選擇的片段
+    // In highlights mode only show selected highlights
     const blocks =
       viewMode === "highlights"
         ? selectedHighlights
@@ -186,17 +186,17 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     });
   }, [data, duration, selectedHighlights, viewMode]);
 
-  // 計算下一個精彩片段的時間
+  // Calculate next highlight time
   const getNextHighlightTime = useCallback(
     (currentTime) => {
       if (viewMode !== "highlights" || !selectedHighlights.length) return null;
 
-      // 找到下一個精彩片段
+      // Find next highlight
       const nextHighlight = selectedHighlights.find(
         (h) => h.start_time > currentTime
       );
 
-      // 如果沒有找到下一個片段（當前在最後一個片段），返回第一個片段
+      // If no next highlight found (current at last highlight), return first highlight
       if (!nextHighlight) {
         return selectedHighlights[0].start_time;
       }
@@ -206,7 +206,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     [viewMode, selectedHighlights]
   );
 
-  // 處理影片播放結束
+  // Handle video ended
   const handleVideoEnded = useCallback(() => {
     if (viewMode === "highlights") {
       const nextTime = getNextHighlightTime(currentTime);
@@ -217,7 +217,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     }
   }, [viewMode, currentTime, getNextHighlightTime]);
 
-  // 處理影片時間更新
+  // Handle time update
   const handleTimeUpdate = useCallback(() => {
     if (viewMode === "highlights" && videoRef.current) {
       const currentTime = videoRef.current.currentTime;
@@ -226,7 +226,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
           currentTime >= h.start_time && currentTime < h.start_time + h.duration
       );
 
-      // 如果當前時間不在任何精彩片段內，跳轉到下一個片段
+      // If current time not in any highlight, jump to next highlight
       if (!currentHighlight && selectedHighlights.length > 0) {
         const nextTime = getNextHighlightTime(currentTime);
 
@@ -240,7 +240,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     }
   }, [viewMode, selectedHighlights, getNextHighlightTime]);
 
-  // 加入影片時間更新事件監聽
+  // Add time update event listener to video
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -251,7 +251,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     };
   }, [handleTimeUpdate]);
 
-  // 加入影片結束事件監聽
+  // Add video ended event listener
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -262,10 +262,10 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     };
   }, [handleVideoEnded]);
 
-  // 處理模式切換
+  // Handle mode change
   const handleModeChange = useCallback(
     (mode) => {
-      // 如果精彩片段模式下沒有選擇片段，則不切換模式
+      // If highlights mode has no selected highlights, do not switch mode
       if (mode === "highlights" && selectedHighlights.length === 0) return;
 
       setViewMode(mode);
@@ -274,7 +274,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
         selectedHighlights.length > 0 &&
         videoRef.current
       ) {
-        // 切換到精彩片段模式時，跳轉到第一個精彩片段
+        // Switch to highlights mode, jump to first highlights
         videoRef.current.currentTime = selectedHighlights[0].start_time;
         videoRef.current.play();
       }
@@ -285,7 +285,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-primary p-8 flex items-center justify-center">
-        <div className="text-secondary">載入中...</div>
+        <div className="text-secondary">Loading...</div>
       </div>
     );
   }
@@ -293,7 +293,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
   if (error) {
     return (
       <div className="min-h-screen bg-primary p-8 flex items-center justify-center">
-        <div className="text-error">載入失敗：{error.message}</div>
+        <div className="text-error">Loading failed: {error.message}</div>
       </div>
     );
   }
@@ -302,19 +302,21 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
     <div className="min-h-screen bg-primary p-8">
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-secondary">影片播放</h1>
+          <h1 className="text-3xl font-bold text-secondary">Video Player</h1>
           <button
             onClick={() => navigate("/")}
             className="px-4 py-2 bg-primary-dark text-primary-light rounded-md hover:bg-secondary-light transition-colors"
           >
-            返回列表
+            Return to List
           </button>
         </div>
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* 左側：字幕區域 */}
+          {/* Left side: subtitle area */}
           <div className="flex-1 order-2 lg:order-1 bg-primary-light rounded-lg p-6 shadow-md">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-secondary">字幕區域</h2>
+              <h2 className="text-xl font-bold text-secondary">
+                Subtitle Area
+              </h2>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleModeChange("all")}
@@ -324,7 +326,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
-                  全部模式
+                  All Mode
                 </button>
                 <button
                   onClick={() => handleModeChange("highlights")}
@@ -339,7 +341,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
-                  精彩片段模式
+                  Highlights Mode
                 </button>
               </div>
             </div>
@@ -411,10 +413,12 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
               )}
             </div>
           </div>
-          {/* 右側：影片播放器 */}
+          {/* Right side: video player */}
           <div className="flex-1 order-1 lg:order-2 bg-primary-light rounded-lg p-6 shadow-md flex flex-col items-center">
             <h2 className="text-xl font-bold text-secondary mb-4">
-              {viewMode === "highlights" ? "精彩片段預覽" : "原始影片"}
+              {viewMode === "highlights"
+                ? "Highlights Preview"
+                : "Original Video"}
             </h2>
             <div className="relative w-full">
               <p className="mb-4 text-secondary font-medium">{videoName}</p>
@@ -426,52 +430,52 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
                 autoPlay
               />
 
-              {/* 浮水印字幕 */}
+              {/* Watermark subtitle */}
               {currentSubtitle && (
                 <div className="absolute left-1/2 bottom-6 -translate-x-1/2 bg-black/60 text-white text-lg px-2 py-1 shadow-lg pointer-events-none select-none max-w-[90%] text-center">
                   {currentSubtitle}
                 </div>
               )}
             </div>
-            {/* 自訂播放/暫停按鈕 */}
+            {/* Custom play/pause button */}
             <div className="flex items-center gap-4 mt-2">
-              {/* 快退5秒 */}
+              {/* Fast backward 5 seconds */}
               <button
                 onClick={() => seek(-5)}
                 className="p-2 text-primary-dark rounded-md hover:bg-secondary-light hover:text-primary-light transition-colors flex items-center justify-center"
-                aria-label="快退5秒"
+                aria-label="Fast backward 5 seconds"
               >
                 <RewindIcon />
               </button>
-              {/* 播放/暫停 */}
+              {/* Play/pause */}
               <button
                 onClick={handlePlayPause}
                 className="px-6 py-2 text-primary-dark rounded-md hover:bg-secondary-light hover:text-primary-light transition-colors font-bold text-lg flex items-center justify-center"
-                aria-label={isPlaying ? "暫停" : "播放"}
+                aria-label={isPlaying ? "Pause" : "Play"}
               >
                 {isPlaying ? <PauseIcon /> : <PlayIcon />}
               </button>
-              {/* 快轉5秒 */}
+              {/* Fast forward 5 seconds */}
               <button
                 onClick={() => seek(5)}
                 className="p-2 text-primary-dark rounded-md hover:bg-secondary-light hover:text-primary-light transition-colors flex items-center justify-center"
-                aria-label="快轉5秒"
+                aria-label="Fast forward 5 seconds"
               >
                 <ForwardIcon />
               </button>
-              {/* 時間資訊 */}
+              {/* Time information */}
               <span className="ml-4 text-secondary-light text-sm tabular-nums">
                 {formatTime(currentTime)} / {formatTime(duration)}
               </span>
             </div>
-            {/* 時間軸 */}
+            {/* Timeline */}
             <div className="relative w-full mt-4 h-5 flex items-center">
-              {/* 主時間軸 */}
+              {/* Main timeline */}
               <div
                 className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-6 bg-gray-200 rounded-md cursor-pointer"
                 onClick={handleTimelineClick}
               />
-              {/* 精彩片段區塊 */}
+              {/* Highlight blocks */}
               {highlightBlocks.map((block, i) => (
                 <div
                   key={i}
@@ -489,7 +493,7 @@ const VideoPlayer = ({ videoUrl, videoName }) => {
                   onClick={() => handleSubtitleClick(block.start)}
                 />
               ))}
-              {/* 播放進度當前點 */}
+              {/* Current playback progress point */}
               <div
                 className="absolute top-1/2 -translate-y-1/2 w-3 h-5 bg-secondary-light border-2 border-white rounded-md shadow transition-all"
                 style={{ left: `calc(${progress}% - 0.5rem)`, zIndex: 3 }}

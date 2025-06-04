@@ -22,12 +22,17 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-primary">
       {showToast && (
-        <Toast message="上傳成功" onClose={() => setShowToast(false)} />
+        <Toast
+          message="Upload Successful"
+          onClose={() => setShowToast(false)}
+        />
       )}
 
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-secondary">影片管理系統</h1>
+          <h1 className="text-3xl font-bold text-secondary">
+            Video Management System
+          </h1>
         </div>
 
         <div
@@ -37,13 +42,15 @@ const HomePage = () => {
               : "grid-cols-1 max-w-2xl mx-auto"
           } gap-8`}
         >
-          {/* 左側：上傳區域 */}
+          {/* Left: Upload Area */}
           <div className="bg-primary-light rounded-lg p-6 shadow-md">
-            <h2 className="text-xl font-bold text-secondary mb-4">上傳影片</h2>
+            <h2 className="text-xl font-bold text-secondary mb-4">
+              Upload Video
+            </h2>
             <UploadVideo onUploadSuccess={handleUploadSuccess} />
           </div>
 
-          {/* 右側：影片清單 */}
+          {/* Right: Video List */}
           {hasVideos && (
             <div className="bg-primary-light rounded-lg p-6 shadow-md">
               <VideoList

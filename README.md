@@ -1,108 +1,108 @@
 # Video Clips
 
-一個基於 React 的影片剪輯預覽工具，可以幫助你管理和預覽影片剪輯效果片段。
+A React-based video clip preview tool that helps you manage and preview video clip effects.
 
-## 功能特點
+## Features
 
-- 影片上傳和管理
-- 自動生成影片字幕
-- 加亮重要片段
-- 手動選擇和標記精彩片段
-- 時間軸視覺化
-- 支持多種播放模式
+- Video upload and management
+- Automatic video subtitle generation
+- Highlight important segments
+- Manual selection and marking of highlights
+- Timeline visualization
+- Multiple playback modes
 
-## 技術棧
+## Tech Stack
 
 - React 18
 - React Router
 - React Query
 - TailwindCSS
-- Supabase (影片儲存空間)
+- Supabase (Video Storage)
 - Axios
 
-## 本地開發
+## Local Development
 
-### 前置需求
+### Prerequisites
 
-- Node.js 18 或更高版本
-- npm 或 yarn
+- Node.js 18 or higher
+- npm or yarn
 
-### 安裝步驟
+### Installation Steps
 
-1. 複製儲存庫
+1. Clone the repository
 
 ```bash
 git clone https://github.com/tara530991/video-clips.git
 cd video-clips
 ```
 
-2. 安裝依賴
+2. Install dependencies
 
 ```bash
 npm install
 ```
 
-3. 創建環境變量文件
+3. Create environment file
 
 ```bash
 cp .env.example .env
 ```
 
-4. 配置環境變量
-   在 `.env` 文件中填入以下配置：
+4. Configure environment variables
+   Add the following configurations to your `.env` file:
 
 ```
-REACT_APP_SUPABASE_URL=你的_SUPABASE_URL
-REACT_APP_SUPABASE_ANON_KEY=你的_SUPABASE_ANON_KEY
-REACT_APP_API_BASE_URL=你的_API_BASE_URL
+REACT_APP_SUPABASE_URL=your_SUPABASE_URL
+REACT_APP_SUPABASE_ANON_KEY=your_SUPABASE_ANON_KEY
+REACT_APP_API_BASE_URL=your_API_BASE_URL
 ```
 
-5. 啟動開發服務器
+5. Start development server
 
 ```bash
 npm start
 ```
 
-## 部署
+## Deployment
 
-本項目使用 GitHub Pages 進行部署。每次推送到 `main` 分支時，GitHub Actions 會自動構建並部署到 GitHub Pages。
+This project is deployed using GitHub Pages. Every push to the `main` branch triggers GitHub Actions to automatically build and deploy to GitHub Pages.
 
-### 部署步驟
+### Deployment Steps
 
-1. 確保所有更改已提交並推送到 `main` 分支
-2. GitHub Actions 會自動執行以下步驟：
-   - 安裝依賴
-   - 構建項目
-   - 部署到 GitHub Pages
+1. Ensure all changes are committed and pushed to the `main` branch
+2. GitHub Actions will automatically:
+   - Install dependencies
+   - Build the project
+   - Deploy to GitHub Pages
 
-## 項目結構
+## Project Structure
 
 ```
 video-clips/
-├── public/              # 靜態資源
-├── src/                 # 源代碼
-│   ├── components/      # React 組件
-│   ├── hooks/          # 自定義 Hooks
-│   ├── pages/          # 頁面組件
-│   ├── utils/          # 工具函數
-│   └── App.js          # 應用入口
-├── .github/            # GitHub 配置
-│   └── workflows/      # GitHub Actions 工作流
-└── package.json        # 項目配置
+├── public/              # Static assets
+├── src/                 # Source code
+│   ├── components/      # React components
+│   ├── hooks/          # Custom hooks
+│   ├── pages/          # Page components
+│   ├── utils/          # Utility functions
+│   └── App.js          # Application entry
+├── .github/            # GitHub configuration
+│   └── workflows/      # GitHub Actions workflows
+└── package.json        # Project configuration
 ```
 
-## 貢獻指南
+## Contributing
 
-1. Fork 本項目
-2. 創建你的功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交你的更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 開啟一個 Pull Request
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 授權
+## License
 
-MIT License - 詳見 [LICENSE](LICENSE) 文件
+MIT License - see [LICENSE](LICENSE) file for details
 
-## 聯繫方式
+## Contact
 
 - GitHub: [@tara530991](https://github.com/tara530991)

@@ -33,7 +33,7 @@ const UploadVideo = ({ onUploadSuccess }) => {
       console.log("extension", extension);
 
       if (extension !== "mp4" && extension !== "mov" && extension !== "webm") {
-        throw new Error("請上傳 MP4, WebM, MOV 格式");
+        throw new Error("Please upload MP4, WebM, or MOV format");
       }
 
       setSelectedFile(file);
@@ -76,7 +76,7 @@ const UploadVideo = ({ onUploadSuccess }) => {
       setSelectedFile(null);
     } catch (err) {
       setError(err.message);
-      console.error("上傳失敗：", err);
+      console.error("Upload failed:", err);
     } finally {
       setUploading(false);
     }
@@ -130,9 +130,9 @@ const UploadVideo = ({ onUploadSuccess }) => {
                 strokeLinejoin="round"
               />
             </svg>
-            <p className="text-secondary">點擊或拖曳檔案至此處上傳</p>
+            <p className="text-secondary">Click or drag files here to upload</p>
             <p className="text-sm text-secondary-light">
-              支援 MP4, WebM, MOV 格式
+              Supports MP4, WebM, MOV formats
             </p>
           </div>
         )}
@@ -144,7 +144,7 @@ const UploadVideo = ({ onUploadSuccess }) => {
             onClick={() => setSelectedFile(null)}
             className="px-4 py-2 text-secondary-light hover:text-secondary transition-colors"
           >
-            取消
+            Cancel
           </button>
         )}
         <button
@@ -157,7 +157,7 @@ const UploadVideo = ({ onUploadSuccess }) => {
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
         >
-          {uploading ? "上傳中..." : "上傳"}
+          {uploading ? "Uploading..." : "Upload"}
         </button>
       </div>
     </div>

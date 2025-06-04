@@ -6,7 +6,7 @@ const HighlightPlayer = ({ videoUrl, highlights, onTimeUpdate }) => {
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 當精彩片段改變時，更新視頻源
+  // Update video source when highlights change
   useEffect(() => {
     if (!highlights.length || !videoRef.current) return;
 
@@ -16,7 +16,7 @@ const HighlightPlayer = ({ videoUrl, highlights, onTimeUpdate }) => {
     }
   }, [highlights, currentHighlightIndex]);
 
-  // 監聽視頻播放進度
+  // Monitor video playback progress
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !highlights.length) return;
@@ -25,7 +25,7 @@ const HighlightPlayer = ({ videoUrl, highlights, onTimeUpdate }) => {
       const currentTime = video.currentTime;
       const currentHighlight = highlights[currentHighlightIndex];
 
-      // 如果當前時間超過當前高亮片段的結束時間，切換到下一個片段
+      // If current time exceeds current highlight end time, switch to next highlight
       if (
         currentTime >=
         currentHighlight.start_time + currentHighlight.duration
@@ -33,13 +33,13 @@ const HighlightPlayer = ({ videoUrl, highlights, onTimeUpdate }) => {
         if (currentHighlightIndex < highlights.length - 1) {
           setCurrentHighlightIndex((prev) => prev + 1);
         } else {
-          // 如果是最後一個片段，停止播放
+          // If it's the last highlight, stop playback
           video.pause();
           setIsPlaying(false);
         }
       }
 
-      // 通知父組件當前播放時間
+      // Notify parent component of current playback time
       if (onTimeUpdate) {
         onTimeUpdate(currentTime);
       }
@@ -49,7 +49,7 @@ const HighlightPlayer = ({ videoUrl, highlights, onTimeUpdate }) => {
     return () => video.removeEventListener("timeupdate", handleTimeUpdate);
   }, [highlights, currentHighlightIndex, onTimeUpdate]);
 
-  // 播放/暫停控制
+  // Play/pause control
   const handlePlayPause = () => {
     if (!videoRef.current) return;
     if (isPlaying) {
@@ -60,7 +60,7 @@ const HighlightPlayer = ({ videoUrl, highlights, onTimeUpdate }) => {
     setIsPlaying(!isPlaying);
   };
 
-  // 切換到上一個/下一個精彩片段
+  // Switch to previous/next highlight
   const handleSeekHighlight = (direction) => {
     if (!highlights.length) return;
 
@@ -82,21 +82,21 @@ const HighlightPlayer = ({ videoUrl, highlights, onTimeUpdate }) => {
         controls={false}
       />
 
-      {/* 自定義控制欄 */}
+      {/* Custom control bar */}
       <div className="bg-black/50 p-3 flex items-center justify-center gap-4">
         <button
           onClick={() => handleSeekHighlight(-1)}
           className="p-2 text-white rounded-md hover:bg-white/20 transition-colors"
           disabled={currentHighlightIndex === 0}
         >
-          上一個片段
+          Previous Highlight
         </button>
 
         <button
           onClick={handlePlayPause}
           className="px-6 py-2 text-white rounded-md hover:bg-white/20 transition-colors"
         >
-          {isPlaying ? "暫停" : "播放"}
+          {isPlaying ? "Pause" : "Play"}
         </button>
 
         <button
@@ -104,7 +104,7 @@ const HighlightPlayer = ({ videoUrl, highlights, onTimeUpdate }) => {
           className="p-2 text-white rounded-md hover:bg-white/20 transition-colors"
           disabled={currentHighlightIndex === highlights.length - 1}
         >
-          下一個片段
+          Next Highlight
         </button>
       </div>
     </div>

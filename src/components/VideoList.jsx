@@ -52,7 +52,7 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
       }
     } catch (err) {
       setError(err.message);
-      console.error("獲取影片清單失敗：", err);
+      console.error("Failed to fetch video list:", err);
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center p-8">
-        <p className="text-secondary">載入中...</p>
+        <p className="text-secondary">Loading...</p>
       </div>
     );
   }
@@ -86,7 +86,7 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
   if (error) {
     return (
       <div className="p-4 bg-red-100 text-red-700 rounded-md">
-        <p>載入失敗：{error}</p>
+        <p>Failed to load: {error}</p>
       </div>
     );
   }
@@ -94,17 +94,19 @@ const VideoList = ({ refreshTrigger, onVideosUpdate }) => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-secondary">影片清單</h2>
+        <h2 className="text-xl font-bold text-secondary">Video List</h2>
         <button
           onClick={fetchVideos}
           className="px-3 py-1 text-sm bg-primary-dark text-primary-light rounded-md hover:bg-primary transition-colors"
         >
-          重新整理
+          Refresh
         </button>
       </div>
 
       {videos.length === 0 ? (
-        <p className="text-secondary-light text-center py-8">目前沒有影片</p>
+        <p className="text-secondary-light text-center py-8">
+          No videos available
+        </p>
       ) : (
         <div className="grid grid-cols-2 gap-4">
           {videos.map((video) => (

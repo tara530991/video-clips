@@ -30,13 +30,13 @@ const VideoCard = ({ video, onPlay }) => {
           {video.name.split("_").slice(1).join("_")}
         </p>
         <p className="text-sm text-secondary-light">
-          上傳時間：{video.uploadedAt.toLocaleString("zh-TW")}
+          Uploaded: {video.uploadedAt.toLocaleString("en-US")}
         </p>
         <button
           onClick={() => onPlay(video)}
           className="mt-4 w-full px-4 py-2 bg-primary-dark text-primary-light rounded-md hover:bg-primary transition-colors"
         >
-          播放影片
+          Play Video
         </button>
       </div>
     </div>
